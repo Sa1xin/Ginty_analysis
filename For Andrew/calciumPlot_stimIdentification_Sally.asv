@@ -599,7 +599,6 @@ pooled_resp_filt       = pooled_resp(responsive_mask, :);
 pooled_resp_dur_filt   = pooled_resp_dur(responsive_mask, :);
 pooled_exp_id_filt     = pooled_exp_id(responsive_mask);
 pooled_cell_id_filt    = pooled_cell_id(responsive_mask);
-pooled_is_responsive_filt = pooled_is_responsive(responsive_mask, :);
 
 resp2 = pooled_resp_filt(:,1);
 resp3 = pooled_resp_filt(:,2);
@@ -798,7 +797,7 @@ for e = 1:numel(D)
 
     stim1_is_responsive_filt(exp_cells) = isResp;
 end
-idx_resp1_stim1resp = find(pooled_is_responsive_filt(:,1) & stim1_is_responsive_filt);
+idx_resp1_stim1resp = find(pooled_resp_filt(:,1) & stim1_is_responsive_filt);
 
 late_higher_all_filt = false(size(pooled_exp_id_filt));
 
@@ -971,61 +970,7 @@ yline(numel(sorted_win1) + numel(sorted_high_w2) + 0.5, 'g--', 'LineWidth', 1.0)
 
 hold off;
 %% Look in each pinch stimuli and see the percentage of chemical response
-% win1 group
-n_win1 = numel(idx_win1);
-n_win1_stim3 = sum(pooled_is_responsive_filt(idx_win1, 1));
-n_win1_stim4 = sum(pooled_is_responsive_filt(idx_win1, 2));
 
-perc_win1_stim3 = 100 * n_win1_stim3 / n_win1;
-perc_win1_stim4 = 100 * n_win1_stim4 / n_win1;
-
-% win2 group
-n_win2 = numel(idx_win2);
-n_win2_stim3 = sum(pooled_is_responsive_filt(idx_win2, 1));
-n_win2_stim4 = sum(pooled_is_responsive_filt(idx_win2, 2));
-
-perc_win2_stim3 = 100 * n_win2_stim3 / n_win2;
-perc_win2_stim4 = 100 * n_win2_stim4 / n_win2;
-
-blue   = [0, 48, 130] / 255;
-yellow = [255, 201, 23] / 255;
-
-fig_pie2 = figure('Name','Stim3 vs Stim4 responsive fractions', ...
-    'NumberTitle','off', ...
-    'Position',[100 100 1000 450], ...
-    'Color','w');
-
-% ---- pie for idx_win1
-subplot(1,2,1)
-
-labels1 = {
-    sprintf('AITC\n%.1f%%', perc_win1_stim3)
-    sprintf('Capsaicin\n%.1f%%', perc_win1_stim4)
-};
-
-p1 = pie([n_win1_stim3, n_win1_stim4], labels1);
-p1(1).FaceColor = blue;
-p1(3).FaceColor = yellow;
-
-t1 = title(sprintf('Thigh (n=%d)', n_win1));
-t1.Units = 'normalized';
-t1.Position(2) = 1.08;   % move up (try 1.1–1.2)
-
-% ---- pie for idx_win2
-subplot(1,2,2)
-
-labels2 = {
-    sprintf('AITC\n%.1f%%', perc_win2_stim3)
-    sprintf('Capsaicin\n%.1f%%', perc_win2_stim4)
-};
-
-p2 = pie([n_win2_stim3, n_win2_stim4], labels2);
-p2(1).FaceColor = blue;
-p2(3).FaceColor = yellow;
-
-t2 = title(sprintf('Paw (n=%d)', n_win2));
-t2.Units = 'normalized';
-t2.Position(2) = 1.08;   % move up (try 1.1–1.2)
 
 
 %% Normalize the response across stimulation
